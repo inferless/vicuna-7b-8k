@@ -1,5 +1,0 @@
-build:
-  cuda_version: "12.1.1"
-  python_packages:
-    - "einops==0.6.1"
-    - "auto-gptq==0.3.0"
