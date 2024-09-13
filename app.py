@@ -3,13 +3,14 @@ from transformers import AutoTokenizer, pipeline, logging
 from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
 import argparse
 
-model_name_or_path = "TheBloke/vicuna-7B-v1.3-GPTQ"
+
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 class InferlessPythonModel:
     def initialize(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-        self.model = AutoGPTQForCausalLM.from_quantized(model_name_or_path,
+        model_id = "TheBloke/vicuna-7B-v1.3-GPTQ"
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
+        self.model = AutoGPTQForCausalLM.from_quantized(model_id,
             use_safetensors=True,
             trust_remote_code=True,
             device_map='auto',
@@ -36,5 +37,4 @@ class InferlessPythonModel:
         return {"generated_text": generated_text}
 
     def finalize(self):
-        self.tokenizer = None
         self.model = None
