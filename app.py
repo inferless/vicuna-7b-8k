@@ -1,11 +1,16 @@
+import os
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"]='1'
+from huggingface_hub import snapshot_download
 from transformers import AutoTokenizer
 from auto_gptq import AutoGPTQForCausalLM
 
 class InferlessPythonModel:
   def initialize(self):
-      self.tokenizer = AutoTokenizer.from_pretrained("TheBloke/vicuna-7B-v1.3-GPTQ", use_fast=True)
+      model_id = "TheBloke/vicuna-7B-v1.3-GPTQ"
+      snapshot_download(repo_id=model_id,allow_patterns=["*.safetensors"])
+      self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
       self.model = AutoGPTQForCausalLM.from_quantized(
-        "TheBloke/vicuna-7B-v1.3-GPTQ",
+        model_id,
         use_safetensors=True,
         device="cuda:0",
         quantize_config=None,
